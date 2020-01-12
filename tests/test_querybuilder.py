@@ -1,16 +1,16 @@
-import acled.query
+import acled_client.query
 import pytest
 
 
 @pytest.fixture
 def querybuilder():
-    import acled.query
+    import acled_client.query
 
-    return acled.query.Query.iso(1)
+    return acled_client.query.Query.iso(1)
 
 
 def test_querybuilder(querybuilder):
-    assert type(querybuilder) is acled.query.QueryBuilder
+    assert type(querybuilder) is acled_client.query.QueryBuilder
 
 
 def test_set_iso(querybuilder):
@@ -19,5 +19,5 @@ def test_set_iso(querybuilder):
 
 
 def test_print_iso(querybuilder):
-    querybuilder.iso(5)
-    assert querybuilder.__str__() == "_iso: 5 | "
+    querybuilder.iso(1)
+    assert querybuilder.__str__() == "_iso: 1 | "

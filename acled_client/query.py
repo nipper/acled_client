@@ -1,8 +1,8 @@
 import re
-import acled.results
-from acled.utils import builder
+import acled_client.results
+from acled_client.utils import builder
 
-is_8601 = re.compile("\d{4}-\d{2}-\d{2}")
+is_8601 = re.compile(r"\d{4}-\d{2}-\d{2}")
 
 
 class QueryBuilder:
@@ -31,7 +31,6 @@ class QueryBuilder:
 
     @builder
     def iso(self, number: int):
-
         if not isinstance(number, int):
             return ValueError(f"ISO Country must be an integer.")
         self._iso = number
@@ -69,7 +68,7 @@ class QueryBuilder:
             self._add_term("_event_date")
 
     def execute(self):
-        return acled.results.EventResults(self)
+        return acled_client.results.EventResults(self)
 
     def to_dict(self):
         return {key[1:]: getattr(self, key) for key in self._set_params}
@@ -95,7 +94,6 @@ class Query:
     @classmethod
     def iso(cls, number) -> QueryBuilder:
         querybuilder = cls._builder()
-
         return querybuilder.iso(number)
 
     @classmethod

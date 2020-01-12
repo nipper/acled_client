@@ -41,7 +41,7 @@ def builder(func):
 
     def _copy(self, *args, **kwargs):
         self_copy = copy.copy(self)
-        result = func(self_copy, *args, **kwargs)
+        func(self_copy, *args, **kwargs)
 
         return self_copy
 
