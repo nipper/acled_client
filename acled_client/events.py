@@ -8,46 +8,71 @@ from acled_client.utils import builder
 
 is_8601 = re.compile(r"\d{4}-\d{2}-\d{2}")
 
+class BaseBuilder:
 
-class QueryBuilder:
     def __init__(self):
-
-        self._iso: int = None
-        self._year: int = None
-        self._set_params = []
-        self._event_date = None
-        self._event_date_where = None
         self._terms = False
+        self._set_params = []
         self.url: str = "https://api.acleddata.com/acled/read"
 
-    def _add_term(self, item):
+
+    def _add_param(self, item):
         if item not in self._set_params:
             self._set_params.append(item)
 
-    def _remove_term(self, item):
+    def _remove_param(self, item):
         if item in self._set_params:
             self._set_params.remove(item)
 
     @builder
     def terms(self, terms):
         self._terms = terms
-        self._add_term("_terms")
+        self._add_param("_terms")
+
+    def to_dict(self):
+        return {key[1:]: getattr(self, key) for key in self._set_params}
+
+    def to_url_parms(self):
+        params_string = [f"{k}={v}" for (k, v) in self.to_dict().items()]
+        return "&".join(params_string)
+
+    def execute(self):
+        return self.results_class(self)
+
+    def __str__(self):
+
+        pretty_view = ""
+        for term in self._set_params:
+            pretty_view = pretty_view + f"{term}: {getattr(self, term)} | "
+
+        return pretty_view
+
+class EventQueryBuilder(BaseBuilder):
+
+    def __init__(self):
+        self._iso: int = None
+        self._year: int = None
+        self._event_date = None
+        self._event_date_where = None
+        self.results_class = EventResults
+
+        super().__init__()
 
     @builder
     def iso(self, number: int):
         if not isinstance(number, int):
             return ValueError(f"ISO Country must be an integer.")
         self._iso = number
-        self._add_term("_iso")
+        self._add_param("_iso")
 
     @builder
     def year(self, year):
 
         if not isinstance(year, int):
-            return ValueError(f"Year Country must be an integer.")
+            return ValueError(f"Year must be an integer.")
 
         self._year = year
-        self._add_term("_year")
+        self._add_param("_year")
 
     @builder
     def event_date(self, start_date, end_date=None):
@@ -62,52 +87,34 @@ class QueryBuilder:
             self._event_date = start_date
             self._event_date_where = None
 
-            self._remove_term("_event_date_where")
-            self._add_term("_event_date")
+            self._remove_param("_event_date_where")
+            self._add_param("_event_date")
         else:
             self._event_date = f"{{{start_date}|{end_date}}}"
             self._event_date_where = "BETWEEN"
 
-            self._add_term("_event_date_where")
-            self._add_term("_event_date")
-
-    def execute(self):
-        return EventResults(self)
-
-    def to_dict(self):
-        return {key[1:]: getattr(self, key) for key in self._set_params}
-
-    def to_url_parms(self):
-        params_string = [f"{k}={v}" for (k, v) in self.to_dict().items()]
-        return "&".join(params_string)
-
-    def __str__(self):
-
-        pretty_view = ""
-        for term in self._set_params:
-            pretty_view = pretty_view + f"{term}: {getattr(self,term)} | "
-
-        return pretty_view
+            self._add_param("_event_date_where")
+            self._add_param("_event_date")
 
 
-class Query:
+class EventQuery:
     @classmethod
     def _builder(cls):
-        return QueryBuilder()
+        return EventQueryBuilder()
 
     @classmethod
-    def iso(cls, number) -> QueryBuilder:
+    def iso(cls, number) -> EventQueryBuilder:
         querybuilder = cls._builder()
         return querybuilder.iso(number)
 
     @classmethod
-    def year(cls, year) -> QueryBuilder:
+    def year(cls, year) -> EventQueryBuilder:
         querybuilder = cls._builder()
 
         return querybuilder.year(year)
 
     @classmethod
-    def event_date(cls, start_date, end_date=None) -> QueryBuilder:
+    def event_date(cls, start_date, end_date=None) -> EventQueryBuilder:
         querybuilder = cls._builder()
 
         return querybuilder.event_date(start_date, end_date)
@@ -138,7 +145,6 @@ class EventResults:
         :return: A generator with iterates through the request results.
         """
         while True:
-            print(self.query_page)
             yield self.query_results.json()["data"]
 
             if self.query_results.json()["count"] < 500:

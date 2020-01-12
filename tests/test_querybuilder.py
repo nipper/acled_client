@@ -6,11 +6,11 @@ import pytest
 def querybuilder():
     import acled_client.events
 
-    return acled_client.events.Query.iso(1)
+    return acled_client.events.EventQuery.iso(1)
 
 
 def test_querybuilder(querybuilder):
-    assert type(querybuilder) is acled_client.events.QueryBuilder
+    assert type(querybuilder) is acled_client.events.EventQueryBuilder
 
 
 def test_set_iso(querybuilder):
