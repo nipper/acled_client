@@ -24,5 +24,5 @@ def test_print_iso(querybuilder):
 
 
 def test_set_event_id_cnty(querybuilder):
-    querybuilder.event_id_cnty("TEST1234")
-    assert querybuilder.event_id_cnty == "TEST1234"
+    querybuilder.event_id_cnty("TEST1234", in_place=True)
+    assert querybuilder._event_id_cnty == "TEST1234"
