@@ -8,7 +8,6 @@ class BaseBuilder:
         self._set_params = []
         self.url: str = "https://api.acleddata.com/acled/read"
 
-
     def _add_param(self, item):
         if item not in self._set_params:
             self._set_params.append(item)
