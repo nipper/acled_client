@@ -4,8 +4,8 @@ from typing import Generator
 import requests
 import pandas
 
-class BaseBuilder:
 
+class BaseBuilder:
     def __init__(self):
         self._terms = False
         self._set_params = []
@@ -53,8 +53,7 @@ class BaseQuery:
 
 
 class BaseResults:
-
-    def __init__(self,query = None):
+    def __init__(self, query=None):
         self.query = query
         self.query_results: requests.Response = None
         self.query_page: int = 1

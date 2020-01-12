@@ -5,8 +5,8 @@ from acled_client.utils import builder
 
 is_8601 = re.compile(r"\d{4}-\d{2}-\d{2}")
 
-class EventQueryBuilder(BaseBuilder):
 
+class EventQueryBuilder(BaseBuilder):
     def __init__(self):
         self._iso: int = None
         self._year: int = None
@@ -14,7 +14,7 @@ class EventQueryBuilder(BaseBuilder):
         self._event_date_where = None
         self.results_class = EventResults
 
-
+        super().__init__()
 
     @builder
     def iso(self, number: int):
@@ -79,4 +79,4 @@ class EventQuery(BaseQuery):
 
 
 class EventResults(BaseResults):
-   pass
+    pass
