@@ -66,6 +66,7 @@ class EventQuery(BaseQuery):
     @classmethod
     def iso(cls, number) -> EventQueryBuilder:
         querybuilder = cls._builder()
+
         return querybuilder.iso(number)
 
     @classmethod
