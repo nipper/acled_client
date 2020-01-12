@@ -31,7 +31,6 @@ setup(
         "Programming Language :: Python :: 3.8",
     ],
     description="A client library/wrapper for the ACLED project. ",
-    entry_points={"console_scripts": ["acled_client=acled_client.cli:main"]},
     install_requires=requirements,
     license="MIT license",
     long_description=readme + "\n\n" + history,
