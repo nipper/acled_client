@@ -1,16 +1,16 @@
-import acled_client.query
+import acled_client.events
 import pytest
 
 
 @pytest.fixture
 def querybuilder():
-    import acled_client.query
+    import acled_client.events
 
-    return acled_client.query.Query.iso(1)
+    return acled_client.events.Query.iso(1)
 
 
 def test_querybuilder(querybuilder):
-    assert type(querybuilder) is acled_client.query.QueryBuilder
+    assert type(querybuilder) is acled_client.events.QueryBuilder
 
 
 def test_set_iso(querybuilder):
