@@ -27,3 +27,5 @@ deploy:
     repo: phinizy/acled_client
     python: 3.8
     branch: master
+notifications:
+  slack: dorkery:5FmunO8mrWVNPAzma9kVEiry
