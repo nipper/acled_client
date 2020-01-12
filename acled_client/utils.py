@@ -40,9 +40,19 @@ def builder(func):
     import copy
 
     def _copy(self, *args, **kwargs):
-        self_copy = copy.copy(self)
-        func(self_copy, *args, **kwargs)
 
-        return self_copy
+        if "in_place" not in kwargs:
+            mutate = False
+        else:
+            mutate = kwargs["in_place"]
+            kwargs.pop("in_place") # removes in_place so our wrapped functions dont need to worry about it.
+
+        if mutate:
+            object_to_use = self
+        else:
+            object_to_use = copy.copy(self)
+
+        func(object_to_use, *args, **kwargs)
+        return object_to_use
 
     return _copy

@@ -21,3 +21,8 @@ def test_set_iso(querybuilder):
 def test_print_iso(querybuilder):
     querybuilder.iso(1)
     assert querybuilder.__str__() == "_iso: 1 | "
+
+
+def test_set_event_id_cnty(querybuilder):
+    querybuilder.event_id_cnty("TEST1234")
+    assert querybuilder.event_id_cnty == "TEST1234"

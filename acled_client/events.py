@@ -12,6 +12,7 @@ class EventQueryBuilder(BaseBuilder):
         self._year: int = None
         self._event_date = None
         self._event_date_where = None
+        self._event_id_cnty = None
         self.results_class = EventResults
 
         super().__init__()
@@ -54,6 +55,11 @@ class EventQueryBuilder(BaseBuilder):
             self._add_param("_event_date_where")
             self._add_param("_event_date")
 
+    @builder
+    def event_id_cnty(self, text):
+        self._event_id_cnty = text
+        self._add_param("_event_id_cnty")
+
 
 class EventQuery(BaseQuery):
 
@@ -76,6 +82,12 @@ class EventQuery(BaseQuery):
         querybuilder = cls._builder()
 
         return querybuilder.event_date(start_date, end_date)
+
+    @classmethod
+    def event_id_cnty(cls, string) -> EventQueryBuilder:
+        querybuilder = cls._builder()
+
+        return querybuilder.event_id_cnty(string)
 
 
 class EventResults(BaseResults):
