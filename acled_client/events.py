@@ -4,7 +4,7 @@ from typing import Generator
 import pandas
 import requests
 
-from acled_client.base_classes import BaseBuilder
+from acled_client.base_classes import BaseBuilder,BaseQuery
 from acled_client.utils import builder
 
 is_8601 = re.compile(r"\d{4}-\d{2}-\d{2}")
@@ -59,10 +59,9 @@ class EventQueryBuilder(BaseBuilder):
             self._add_param("_event_date")
 
 
-class EventQuery:
-    @classmethod
-    def _builder(cls):
-        return EventQueryBuilder()
+class EventQuery(BaseQuery):
+
+    _builder_class = EventQueryBuilder
 
     @classmethod
     def iso(cls, number) -> EventQueryBuilder:

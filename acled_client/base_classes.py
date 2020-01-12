@@ -38,3 +38,12 @@ class BaseBuilder:
             pretty_view = pretty_view + f"{term}: {getattr(self, term)} | "
 
         return pretty_view
+
+
+class BaseQuery:
+
+    _builder_class = BaseBuilder
+
+    @classmethod
+    def _builder(cls):
+        return cls._builder_class()
