@@ -45,9 +45,7 @@ def builder(func):
             mutate = False
         else:
             mutate = kwargs["in_place"]
-            kwargs.pop(
-                "in_place"
-            )  # removes in_place so our wrapped functions dont need to worry about it.
+            kwargs.pop("in_place")  # removes in_place so our wrapped functions dont need to worry about it.
 
         if mutate:
             object_to_use = self

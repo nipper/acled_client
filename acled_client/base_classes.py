@@ -77,13 +77,9 @@ class BaseResults:
     def _execute_query(self, page=1):
 
         if self.query is None:
-            return UnboundLocalError(
-                f"This results object is malformed and missing a query."
-            )
+            return UnboundLocalError(f"This results object is malformed and missing a query.")
 
-        self.query_results: requests.Response = requests.get(
-            self.query.url, {**self.query.to_dict(), **{"page": page}}
-        )
+        self.query_results: requests.Response = requests.get(self.query.url, {**self.query.to_dict(), **{"page": page}})
 
     def to_dataframe(self, page: int = 1) -> pandas.DataFrame:
         """
