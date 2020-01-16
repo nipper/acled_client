@@ -3,6 +3,7 @@ from typing import Generator
 
 import requests
 import pandas
+import time
 import toml
 
 
@@ -11,6 +12,7 @@ class BaseBuilder:
         self._terms = False
         self._set_params = []
         self.title = "None"
+        self.times_executed = []
         self.url: str = "https://api.acleddata.com/acled/read"
 
     def _add_param(self, item):
@@ -26,6 +28,11 @@ class BaseBuilder:
         self._terms = terms
         self._add_param("_terms")
 
+    @builder
+    def timestamp(self, timestamp):
+        self._timestamp = timestamp
+        self.add_terms("_timestamp")
+
     def to_dict(self):
         return {key[1:]: getattr(self, key) for key in self._set_params}
 
@@ -33,8 +40,13 @@ class BaseBuilder:
         params_string = [f"{k}={v}" for (k, v) in self.to_dict().items()]
         return "&".join(params_string)
 
-    def execute(self):
-        return self.results_class(self)
+    def execute(self, use_timestamp=False):
+
+        if use_timestamp:
+            self.times_executed.append(time.time())
+            return self.results_class(self.timestamp(max(self.times_executed)))
+        else:
+            return self.results_class(self)
 
     def __str__(self):
 
