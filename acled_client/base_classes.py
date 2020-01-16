@@ -44,15 +44,16 @@ class BaseBuilder:
 
         return pretty_view
 
-    def to_toml(self):
+    def toml_dump(self):
 
-        base_dict = {"title": self.title,
-                     "query_info": {
-                         "class": type(self)
-                     },
-                     "params": self.to_dict() }
+        base_dict = {"title": self.title, "query_info": {"class": type(self)}, "params": self.to_dict()}
 
         return toml.dumps(base_dict)
+
+    def toml_dumps(self, file):
+
+        with open(file, "rt") as f:
+            f.write(self.toml_dump())
 
 
 class BaseQuery:
