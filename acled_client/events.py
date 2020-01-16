@@ -61,6 +61,7 @@ class EventQueryBuilder(BaseBuilder):
         self._add_param("_event_id_cnty")
 
 
+
 class EventQuery(BaseQuery):
 
     _builder_class = EventQueryBuilder

@@ -3,12 +3,14 @@ from typing import Generator
 
 import requests
 import pandas
+import toml
 
 
 class BaseBuilder:
     def __init__(self):
         self._terms = False
         self._set_params = []
+        self.title = "None"
         self.url: str = "https://api.acleddata.com/acled/read"
 
     def _add_param(self, item):
@@ -41,6 +43,16 @@ class BaseBuilder:
             pretty_view = pretty_view + f"{term}: {getattr(self, term)} | "
 
         return pretty_view
+
+    def to_toml(self):
+
+        base_dict = {"title": self.title,
+                     "query_info": {
+                         "class": type(self)
+                     },
+                     "params": self.to_dict() }
+
+        return toml.dumps(base_dict)
 
 
 class BaseQuery:
