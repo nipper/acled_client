@@ -40,15 +40,21 @@ class EventQueryBuilder(BaseBuilder):
             raise ValueError(f"Start_date must be formatted in 8601 format.")
 
         if end_date is None:
-            self._set_parameter("event_date",start_date)
+            self._set_parameter("event_date", start_date)
             self._remove_parameter("event_date_where")
         else:
-            self._set_parameter("event_date",f"{{{start_date}|{end_date}}}")
-            self._set_parameter("event_date_where","BETWEEN")
+            self._set_parameter("event_date", f"{{{start_date}|{end_date}}}")
+            self._set_parameter("event_date_where", "BETWEEN")
 
     @builder
     def event_id_cnty(self, text):
         self._set_parameter("event_id_cnty", text)
+
+    @builder
+    def time_precision(self, number):
+
+        if number not in (1, 2, 3):
+            raise ValueError(f"Time precision can only be 1, 2 or 3. {number} isn't valid.")
 
 
 class EventQuery(BaseQuery):
@@ -234,7 +240,6 @@ class EventQuery(BaseQuery):
         querybuilder = cls._builder()
 
         return querybuilder.iso3(iso3)
-
 
 
 class EventResults(BaseResults):
