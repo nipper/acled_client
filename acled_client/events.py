@@ -235,7 +235,7 @@ class EventQuery(BaseQuery):
 
         return querybuilder.iso3(iso3)
 
-    
+
 
 class EventResults(BaseResults):
     pass
