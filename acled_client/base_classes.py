@@ -10,28 +10,36 @@ import toml
 class BaseBuilder:
     def __init__(self):
         self._terms = False
-        self._set_params = []
+        self._set_params = {}
         self.title = "None"
         self.times_executed = []
         self.url: str = "https://api.acleddata.com/acled/read"
+        self._valid_parameters = ["terms", "timestamp"]
 
-    def _add_param(self, item):
-        if item not in self._set_params:
-            self._set_params.append(item)
+    def _set_parameter(self, parameter, value):
 
-    def _remove_param(self, item):
-        if item in self._set_params:
-            self._set_params.remove(item)
+        if parameter not in self._valid_parameters:
+            raise KeyError(f"{parameter} is not a valid parameter for {self.__class__}")
+
+        self._set_params[parameter] = value
+
+    def _remove_parameter(self,parameter):
+        if parameter not in self._valid_parameters:
+            raise KeyError(f"{parameter} is not a valid parameter for {self.__class__}")
+
+        try:
+            self._set_params.pop(parameter)
+            return True
+        except KeyError:
+            raise RuntimeWarning(f"{parameter} wasn't set on me.")
 
     @builder
     def terms(self, terms):
-        self._terms = terms
-        self._add_param("_terms")
+        self._set_parameter("terms",terms)
 
     @builder
     def timestamp(self, timestamp):
-        self._timestamp = timestamp
-        self.add_terms("_timestamp")
+        self._set_parameter("timestamp", timestamp)
 
     def to_dict(self):
         return {key[1:]: getattr(self, key) for key in self._set_params}
