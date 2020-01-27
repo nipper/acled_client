@@ -42,7 +42,7 @@ class BaseBuilder:
         self._set_parameter("timestamp", timestamp)
 
     def to_dict(self):
-        return {key[1:]: getattr(self, key) for key in self._set_params}
+        return {key: getattr(self, key) for key in self._set_params}
 
     def to_url_parms(self):
         params_string = [f"{k}={v}" for (k, v) in self.to_dict().items()]
@@ -108,7 +108,7 @@ class BaseResults:
             self.query_page = self.query_page + 1
 
     def _execute_query(self, page=1):
-
+        print(self.query.to_dict()["terms"])
         if self.query is None:
             return UnboundLocalError(f"This results object is malformed and missing a query.")
 
