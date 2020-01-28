@@ -42,7 +42,7 @@ class BaseBuilder:
         self._set_parameter("timestamp", timestamp)
 
     def to_dict(self):
-        return {key: getattr(self, key) for key in self._set_params}
+        return self._set_params
 
     def to_url_parms(self):
         params_string = [f"{k}={v}" for (k, v) in self.to_dict().items()]
