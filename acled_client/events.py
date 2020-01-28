@@ -8,11 +8,6 @@ is_8601 = re.compile(r"\d{4}-\d{2}-\d{2}")
 
 class EventQueryBuilder(BaseBuilder):
     def __init__(self):
-        self._iso: int = None
-        self._year: int = None
-        self._event_date = None
-        self._event_date_where = None
-        self._event_id_cnty = None
         self.results_class = EventResults
         super().__init__()
         self._valid_parameters = self._valid_parameters + ["iso", "year", "event_date", "event_id_cnty"]
