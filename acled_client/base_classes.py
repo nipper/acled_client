@@ -23,7 +23,7 @@ class BaseBuilder:
 
         self._set_params[parameter] = value
 
-    def _remove_parameter(self,parameter):
+    def _remove_parameter(self, parameter):
         if parameter not in self._valid_parameters:
             raise KeyError(f"{parameter} is not a valid parameter for {self.__class__}")
 
@@ -35,7 +35,7 @@ class BaseBuilder:
 
     @builder
     def terms(self, terms):
-        self._set_parameter("terms",terms)
+        self._set_parameter("terms", terms)
 
     @builder
     def timestamp(self, timestamp):
