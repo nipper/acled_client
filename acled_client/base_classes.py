@@ -108,7 +108,6 @@ class BaseResults:
             self.query_page = self.query_page + 1
 
     def _execute_query(self, page=1):
-        print(self.query.to_dict()["terms"])
         if self.query is None:
             return UnboundLocalError(f"This results object is malformed and missing a query.")
 
