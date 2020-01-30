@@ -10,7 +10,13 @@ class EventQueryBuilder(BaseBuilder):
     def __init__(self):
         self.results_class = EventResults
         super().__init__()
-        self._valid_parameters = self._valid_parameters + ["iso", "year", "event_date", "event_id_cnty"]
+        self._valid_parameters = self._valid_parameters + [
+            "iso",
+            "year",
+            "event_date",
+            "event_id_cnty",
+            "event_date_where",
+        ]
 
     @builder
     def iso(self, number: int):
@@ -26,20 +32,24 @@ class EventQueryBuilder(BaseBuilder):
         self._set_parameter("year", year)
 
     @builder
-    def event_date(self, start_date, end_date=None):
+    def event_date(self, start_date, where=None, end_date=None):
 
         if not is_8601.match(start_date):
             raise ValueError(f"Start_date must be formatted in 8601 format.")
 
+        if where and where not in ("=", ">", "<", "BETWEEN"):
+            raise ValueError(f"event_date_where must be one of: '=','>','<','BETWEEN'")
+
         if end_date is not None and not is_8601.match(end_date):
             raise ValueError(f"Start_date must be formatted in 8601 format.")
 
-        if end_date is None:
-            self._set_parameter("event_date", start_date)
-            self._remove_parameter("event_date_where")
-        else:
+        if end_date:
             self._set_parameter("event_date", f"{{{start_date}|{end_date}}}")
             self._set_parameter("event_date_where", "BETWEEN")
+        else:
+            where = "%3D" if (where is None or where == "=") else where
+            self._set_parameter("event_date", start_date)
+            self._set_parameter("event_date_where",where)
 
     @builder
     def event_id_cnty(self, text):

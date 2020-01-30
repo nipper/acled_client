@@ -31,7 +31,7 @@ class BaseBuilder:
             self._set_params.pop(parameter)
             return True
         except KeyError:
-            raise RuntimeWarning(f"{parameter} wasn't set on me.")
+            pass
 
     @builder
     def terms(self, terms):
