@@ -44,10 +44,6 @@ class BaseBuilder:
     def to_dict(self):
         return self._set_params
 
-    def to_url_parms(self):
-        params_string = [f"{k}={v}" for (k, v) in self.to_dict().items()]
-        return "&".join(params_string)
-
     def execute(self, use_timestamp=False):
 
         if use_timestamp:
