@@ -1,3 +1,5 @@
+import pandas
+
 interactors = [
     "State Forces",
     "Rebel Forces",
@@ -28,7 +30,6 @@ nice_column_names = {
     "year": "year",
     "time_precision": "time_precision",
 }
-
 
 def builder(func):
     """

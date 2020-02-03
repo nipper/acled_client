@@ -1,10 +1,11 @@
-from acled_client.utils import builder
+import time
 from typing import Generator
 
-import requests
 import pandas
-import time
+import requests
 import toml
+
+from acled_client.utils import builder
 
 
 class BaseBuilder:
@@ -82,12 +83,19 @@ class BaseQuery:
 
 
 class BaseResults:
+
     def __init__(self, query=None):
+        self._dtype_lookup = {}
+
+        if self._subclass_dtypes:
+            self._dtype_lookup.update(self._subclass_dtypes)
+
         self.query = query
         self.query_results: requests.Response = None
         self.query_page: int = 1
-
-        self._execute_query(page=self.query_page)
+        self.string_type = "object"
+        if query:
+            self._execute_query(page=self.query_page)
 
     def data(self) -> Generator:
         """
@@ -117,4 +125,8 @@ class BaseResults:
         # Reset the page in case if the generator has been called. Not sure how i want to handle this.
         self.query_page = page
 
-        return pandas.concat(pandas.DataFrame(x) for x in self.data())
+        results = pandas.concat(pandas.DataFrame(x) for x in self.data())
+
+        results = results.astype(self._dtype_lookup)
+
+        return results
