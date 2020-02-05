@@ -1,6 +1,6 @@
 from ..base_classes import BaseBuilder
 from ..utils import builder
-from ._utils import is_8601
+from ._utils import is_8601, valid_number
 from .event_results import EventResults
 
 
@@ -14,14 +14,40 @@ class EventQueryBuilder(BaseBuilder):
             "event_date",
             "event_id_cnty",
             "event_date_where",
+            "time_precision",
+            "event_type",
+            "sub_event_type",
+            "actor1",
+            "assoc_actor_1",
+            "inter1",
+            "inter2",
+            "actor2",
+            "assoc_actor_2",
+            "interaction",
+            "region",
+            "country",
+            "admin1",
+            "admin2",
+            "admin3",
+            "location",
+            "latitude",
+            "longitude",
+            "geo_precision",
+            "source",
+            "source_scale",
+            "notes",
+            "fatalities",
+            "iso3",
         ]
 
+    @valid_number
     @builder
     def iso(self, number: int):
         if not isinstance(number, int):
             return ValueError(f"ISO Country must be an integer.")
         self._set_parameter("iso", number)
 
+    @valid_number
     @builder
     def year(self, year):
 
@@ -53,6 +79,7 @@ class EventQueryBuilder(BaseBuilder):
     def event_id_cnty(self, text):
         self._set_parameter("event_id_cnty", text)
 
+    @valid_number
     @builder
     def time_precision(self, number):
 
@@ -77,6 +104,7 @@ class EventQueryBuilder(BaseBuilder):
     def assoc_actor_1(self, assoc_actor_1):
         self._set_parameter("assoc_actor_1", assoc_actor_1)
 
+    @valid_number
     @builder
     def inter1(self, inter1):
         self._set_parameter("inter1", inter1)
@@ -89,14 +117,17 @@ class EventQueryBuilder(BaseBuilder):
     def assoc_actor_2(self, assoc_actor_2):
         self._set_parameter("assoc_actor_2", assoc_actor_2)
 
+    @valid_number
     @builder
     def inter2(self, inter2):
         self._set_parameter("inter2", inter2)
 
+    @valid_number
     @builder
     def interaction(self, interaction):
         self._set_parameter("interaction", interaction)
 
+    @valid_number
     @builder
     def region(self, region):
         self._set_parameter("region", region)
