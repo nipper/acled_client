@@ -185,3 +185,10 @@ class EventQuery(BaseQuery):
         querybuilder = cls._builder()
 
         return querybuilder.iso3(iso3)
+
+    @classmethod
+    def terms(cls, terms) -> EventQueryBuilder:
+
+        querybuilder = cls._builder()
+
+        return querybuilder.terms(terms)
