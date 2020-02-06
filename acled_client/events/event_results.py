@@ -12,7 +12,6 @@ class EventResults(BaseResults):
             "inter2": "int8",
             "iso": "int16",
             "event_date": "datetime64",
-            "region": "int8",
         }
 
         super().__init__(query)
