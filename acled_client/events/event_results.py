@@ -2,9 +2,7 @@ from ..base_classes import BaseResults
 
 
 class EventResults(BaseResults):
-
-
-    def __init__(self,query = None):
+    def __init__(self, query=None):
 
         self._subclass_dtypes = {
             "data_id": "int64",

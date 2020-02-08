@@ -31,6 +31,7 @@ nice_column_names = {
     "time_precision": "time_precision",
 }
 
+
 def builder(func):
     """
     Decorator for wrapper "builder" functions.  These are functions on the Query class or other classes used for

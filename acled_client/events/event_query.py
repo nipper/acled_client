@@ -19,10 +19,10 @@ class EventQuery(BaseQuery):
         return querybuilder.year(year)
 
     @classmethod
-    def event_date(cls, start_date, end_date=None) -> EventQueryBuilder:
+    def event_date(cls, start_date, end_date=None, where=None) -> EventQueryBuilder:
         querybuilder = cls._builder()
 
-        return querybuilder.event_date(start_date, end_date)
+        return querybuilder.event_date(start_date, end_date, where)
 
     @classmethod
     def event_id_cnty(cls, string) -> EventQueryBuilder:

@@ -51,8 +51,6 @@ class EventQueryBuilder(BaseBuilder):
     @builder
     def year(self, year):
 
-        if not isinstance(year, int):
-            return ValueError(f"Year must be an integer.")
         self._set_parameter("year", year)
 
     @builder
@@ -64,14 +62,14 @@ class EventQueryBuilder(BaseBuilder):
         if where and where not in ("=", ">", "<", "BETWEEN"):
             raise ValueError(f"event_date_where must be one of: '=','>','<','BETWEEN'")
 
-        if end_date is not None and not is_8601.match(end_date):
+        if end_date and not is_8601.match(end_date):
             raise ValueError(f"Start_date must be formatted in 8601 format.")
 
         if end_date:
             self._set_parameter("event_date", f"{{{start_date}|{end_date}}}")
             self._set_parameter("event_date_where", "BETWEEN")
         else:
-            where = "%3D" if (where is None or where == "=") else where
+            where = "=" if where is None else where
             self._set_parameter("event_date", start_date)
             self._set_parameter("event_date_where", where)
 

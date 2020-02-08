@@ -55,7 +55,7 @@ class BaseBuilder:
 
     def __str__(self):
 
-        pretty_view = ""
+        pretty_view: str = ""
         for term in self._set_params:
             pretty_view = pretty_view + f"{term}: {getattr(self, term)} | "
 
@@ -83,19 +83,19 @@ class BaseQuery:
 
 
 class BaseResults:
-
     def __init__(self, query=None):
         self._dtype_lookup = {}
 
         if self._subclass_dtypes:
             self._dtype_lookup.update(self._subclass_dtypes)
 
-        self.query = query
+        self.query: BaseQuery = query
         self.query_results: requests.Response = None
-        self.query_page: int = 1
+        self._query_page: int = 1
         self.string_type = "object"
+        self._succesful_query: bool = False
         if query:
-            self._execute_query(page=self.query_page)
+            self._execute_query(page=self._query_page)
 
     def data(self) -> Generator:
         """
@@ -107,25 +107,35 @@ class BaseResults:
             if self.query_results.json()["count"] < 500:
                 break
 
-            self._execute_query(page=self.query_page)
+            self._execute_query(page=self._query_page)
 
-            self.query_page = self.query_page + 1
+            self._query_page = self._query_page + 1
 
     def _execute_query(self, page=1):
+
         if self.query is None:
             return UnboundLocalError(f"This results object is malformed and missing a query.")
 
-        self.query_results: requests.Response = requests.get(self.query.url, {**self.query.to_dict(), **{"page": page}})
+        query_results: requests.Response = requests.get(self.query.url, {**self.query.to_dict(), **{"page": page}})
+
+        if query_results.json()["success"]:
+            self._succesful_query = True
+            self.query_results = query_results
+        else:
+            self.query_results = query_results
+            pass
 
     def to_dataframe(self, page: int = 1) -> pandas.DataFrame:
         """
         :param page: The page to start on. Defaults to 1.
         :return: A pandas data frame with all results.
         """
-        # Reset the page in case if the generator has been called. Not sure how i want to handle this.
-        self.query_page = page
+        import pandas
 
-        results = pandas.concat(pandas.DataFrame(x) for x in self.data())
+        # Reset the page in case if the generator has been called. Not sure how i want to handle this.
+        self._query_page = page
+
+        results = pandas.concat([pandas.DataFrame(x) for x in self.data()])
 
         results = results.astype(self._dtype_lookup)
 

@@ -4,7 +4,6 @@ is_8601 = re.compile(r"\d{4}-\d{2}-\d{2}")
 
 
 def valid_number(func):
-
     def func_wrapper(self, num, *args, **kwargs):
 
         try:
